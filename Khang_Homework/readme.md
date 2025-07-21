@@ -1,37 +1,25 @@
+# Week 4 Applying Analytical Patterns
+The homework this week will be using the `players`, `players_scd`, and `player_seasons` tables from week 1
 
-        Which player averages the most kills per game?
-        
-    from pyspark.sql import functions as F
-    from pyspark.sql.window import Window
-    dedup_df = df.select("match_id", "player_gamertag", "player_total_kills") \
-        .dropDuplicates(["match_id", "player_gamertag"])
-    agg_df = dedup_df.groupBy("player_gamertag").agg(
-        F.sum("player_total_kills").alias("total_kills"),
-        F.count("match_id").alias("games_played"))
-    result_df = agg_df.withColumn(
-        "avg_kills_per_game",
-        F.col("total_kills") / F.col("games_played"))
-    final_df = result_df.orderBy(F.col("avg_kills_per_game").desc())
-
-        Which playlist gets played the most?
-
-    from pyspark.sql import functions as F
-    dedup_df = df.select("match_id", "playlist_id").dropDuplicates()
-    result_df = dedup_df.groupBy("playlist_id").count()
-    result_df = result_df.orderBy(F.col("count").desc())
-
-        Which map gets played the most?
-
-    from pyspark.sql import functions as F
-    dedup = df.select("match_id", "mapid").dropDuplicates()
-    mapid_counts = dedup.groupBy("mapid").count().orderBy(F.col("count").desc())
-    mapid_counts.show()
+- A query that does state change tracking for `players`
+  - A player entering the league should be `New`
+  - A player leaving the league should be `Retired`
+  - A player staying in the league should be `Continued Playing`
+  - A player that comes out of retirement should be `Returned from Retirement`
+  - A player that stays out of the league should be `Stayed Retired`
+  
+- A query that uses `GROUPING SETS` to do efficient aggregations of `game_details` data
+  - Aggregate this dataset along the following dimensions
+    - player and team
+      - Answer questions like who scored the most points playing for one team?
+    - player and season
+      - Answer questions like who scored the most points in one season?
+    - team
+      - Answer questions like which team has won the most games?
+      
+- A query that uses window functions on `game_details` to find out the following things:
+  - What is the most games a team has won in a 90 game stretch? 
+  - How many games in a row did LeBron James score over 10 points a game?
 
 
-        Which map do players get the most Killing Spree medals on?
-
-    from pyspark.sql import functions as F
-    filtered = df.filter(F.col("classification") == "KillingSpree")
-    dedup = filtered.select("match_id", "mapid", "classification").dropDuplicates()
-    result = dedup.groupBy("mapid").count().orderBy(F.col("count").desc())
-    result.show()
+Please add these queries into a folder `homework/<discord-username>`
