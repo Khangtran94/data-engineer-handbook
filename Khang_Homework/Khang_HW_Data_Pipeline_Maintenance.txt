@@ -1,0 +1,168 @@
+# Week 5 Data Pipeline Maintenance  
+## Runbooks and On-call Planning
+
+---
+
+## Pipeline 1: Profit
+
+**Business Focus:**  
+- Unit-level profit (for experiments)  
+- Aggregate profit reported to investors
+
+**Data Types:**  
+- Revenue from accounts  
+- Expenses on assets and services  
+- Salaries by team aggregated
+
+**Owners:**  
+- Primary Owner: Finance Team  
+- Secondary Owner: Data Engineering Team  
+
+**On-call Schedule:**  
+- Rotate weekly among 4 Data Engineers  
+- Finance team reviews once a month  
+- Consider holiday buffer: during major holidays (e.g., end of December, public holidays), an additional backup engineer is assigned to reduce risk of failure going unnoticed  
+
+**Runbook for Investor Reporting Pipeline:**  
+- Pipeline aggregates profit metrics monthly for CFO and investors  
+- Data must reconcile with official financial filings (accountant verification if discrepancies)  
+- Reports generated on first week of each month  
+
+**Potential Issues:**  
+- Profit numbers may not align with filings due to delayed expense reporting or missing data  
+- Data reconciliation errors requiring accountant check  
+- Pipeline failures due to missing salary or expense inputs
+
+---
+
+## Pipeline 2: Growth  
+
+**Business Focus:**  
+- Aggregate growth for investors  
+- Daily growth metrics for experiments
+
+**Data Types:**  
+- Changes in account status (new subscriptions, cancellations, renewals)  
+- Number of licensed users increased/decreased  
+
+**Owners:**  
+- Primary Owner: Accounts Team  
+- Secondary Owner: Data Engineering Team  
+
+**On-call Schedule:**  
+- Debug during working hours only (no formal on-call)  
+- Weekly rotation for Data Engineers managing data updates  
+- During holidays, ensure Accounts Team availability or assign backup Data Engineer to handle urgent fixes  
+
+**Runbook for Investor Reporting Pipeline:**  
+- Weekly summary of account growth rates and forecast renewals  
+- Data completeness check to ensure time series continuity  
+- Final growth numbers delivered monthly for investor reporting  
+
+**Potential Issues:**  
+- Missing time-series data due to skipped steps by Account Executive team  
+- Incomplete data on subscriptions causing inaccurate growth metrics  
+- Delays in data processing affecting daily experimental results
+
+---
+
+## Pipeline 3: Engagement  
+
+**Business Focus:**  
+- Aggregate engagement reported to investors  
+- Daily engagement metrics used internally for feature experimentation  
+
+**Data Types:**  
+- User activity clicks and session times  
+- Aggregated usage metrics across accounts  
+
+**Owners:**  
+- Primary Owner: Software Frontend Team  
+- Secondary Owner: Data Engineering Team  
+
+**On-call Schedule:**  
+- Weekly rotation among Data Engineers (one per week)  
+- Software Frontend Team designated contact for issues  
+- Include overlap meetings of 30 minutes to onboard next on-call engineer  
+- For holiday periods, pre-assign backup on-call to cover shifts  
+
+**Runbook for Investor Reporting Pipeline:**  
+- Engagement metrics must be complete within 48 hours of event timestamps  
+- De-duplication of click events done to ensure accuracy  
+- Monthly engagement report generated for investor presentation  
+
+**Potential Issues:**  
+- Kafka queue delays causing late arrival of click data  
+- Kafka outages resulting in missing events  
+- Duplicate event ingestion leading to inflated metrics  
+
+---
+
+## Pipeline 4: Unit-Level Profit (for experiments)  
+
+**Business Focus:**  
+- Detailed profit data at unit/account level to power AB testing experiments  
+
+**Data Types:**  
+- Per-account revenue and cost details  
+- License usage and associated expenses  
+
+**Owners:**  
+- Primary Owner: Data Engineering Team  
+- Secondary Owner: Finance Team  
+
+**On-call Schedule:**  
+- Rotate daily between 4 Engineers due to high data freshness requirements  
+- Backup engineer assigned during holidays to ensure support coverage  
+
+**Runbook for Experiment Pipeline:**  
+- Pipeline must deliver clean, reconciled unit profit metrics daily  
+- Data inconsistencies flagged and logged for review by Finance  
+- Integrate with experimentation platforms for feature testing  
+
+**Potential Issues:**  
+- Delayed input data causing incomplete unit profit metrics  
+- Reconciliation mismatches causing erroneous experiment results  
+- Pipeline crashing due to spike in ingest volume  
+
+---
+
+## Pipeline 5: Aggregate Data for Executives and Investors  
+
+**Business Focus:**  
+- Aggregate profit, growth, engagement metrics combined for executive reporting and investor updates  
+
+**Data Types:**  
+- Joined data from revenue, accounts, engagement sources  
+
+**Owners:**  
+- Primary Owner: Business Analytics Team  
+- Secondary Owner: Data Engineering Team  
+
+**On-call Schedule:**  
+- Intensive monitoring in last week of each month by rotating engineers  
+- Additional oversight during key reporting periods (month-end, quarter-end)  
+- Holiday coverage planned with backup engineers  
+
+**Runbook for Investor Reporting Pipeline:**  
+- Final monthly aggregated report prepared for CFO, executives, and investors  
+- Address Spark join failures, stale data, NA or division errors through retries/backfills  
+- Report delivered by first week after month-end  
+
+**Potential Issues:**  
+- Spark out-of-memory errors during large joins  
+- Stale data due to incomplete backfills in source pipelines  
+- Missing or null data causing report calculation errors  
+
+---
+
+## Summary of On-call Rotation and Holiday Considerations
+
+| Pipeline                        | On-call Rotation                         | Holiday Coverage Plan                                         |
+|--------------------------------|----------------------------------------|--------------------------------------------------------------|
+| Profit                         | Weekly rotation among 4 engineers      | Backup engineer assigned for major holidays                  |
+| Growth                         | Debug in working hours, weekly rotation| Backup on-call during key holiday periods                     |
+| Engagement                     | Weekly rotation + SWE contact           | Assign backup engineer to cover holiday weeks                 |
+| Unit-Level Profit (Experiments)| Daily rotation among 4 engineers        | Backup assigned on holidays for continuous support           |
+| Aggregate Investor Pipeline    | Intense monitoring last week/month      | Extra backup engineers added for month/quarter-end reporting |
+
