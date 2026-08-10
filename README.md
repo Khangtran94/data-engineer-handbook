@@ -3,6 +3,8 @@
 
 This repo has all the resources you need to become an amazing data engineer!
 
+### Join the free Databricks AI boot camp on August 3rd [here](https://learn.dataexpert.io/program/the-one-week-beginners-databricks-boot-camp-7129) and signup for Databricks Free Edition [here](https://signup.databricks.com/?provider=DB_FREE_TIERutm_source=github&utm_medium=video&utm_campaign=DataExpert)
+
 ## Getting started
 
 If you are new to data engineering, start by following this [2024 breaking into data engineering roadmap](https://blog.dataengineer.io/p/the-2024-breaking-into-data-engineering)
@@ -345,6 +347,7 @@ Top must follow newsletters for data engineering:
 - [LearnDataEngineering.com](https://www.learndataengineering.com)
 - [Technical Freelancer Academy](https://www.technicalfreelanceracademy.com/) Use code **zwtech** for a discount!
 - [IBM Data Engineering for Everyone](https://www.edx.org/learn/data-engineering/ibm-data-engineering-basics-for-everyone)
+- [PrepNPlaced Open Learning](https://www.prepnplaced.com/open-learning) - 153 hours of free SQL, Python, PySpark, and Power BI lessons with MCQs and a free skill test
 - [Qwiklabs](https://www.qwiklabs.com/)
 - [DataCamp](https://www.datacamp.com/)
 - [Udemy Courses from Shruti Mantri](https://www.udemy.com/user/shruti-mantri-5/)
